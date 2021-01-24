@@ -1,0 +1,16 @@
+/node_modules
+/dist
+/.dist
+/gulp+hbs
+/gulp+html
+/webpack+html
+/prox-*
+.DS_Store
+.idea
+
+
+/others
+/vendor
+/public/css
+/public/images
+/public/js
