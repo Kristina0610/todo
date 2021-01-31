@@ -3,17 +3,26 @@
 $stmt = $pdo->query("SELECT * FROM td_projects");
 $projects = $stmt->fetchAll();
 //dump($projects);
+$items = [];
+foreach ($projects as $index => $project) {
+	$items[] = [
+		"data-parent" => 0,
+		"data-level" => 1,
+		"data-id" => $project['id'],
+		"name" => $project['name']	
+	];
+	$stmt = $pdo->prepare("SELECT * FROM td_tasks WHERE project_id = ?");
+	$stmt->execute([$project['id']]);
+	while ($task = $stmt->fetch()) {
+	 	$items[] = [
+			"data-parent" => $project['id'],
+			"data-level" => 2,
+			"data-id" => $task['id'],
+			"name" => $task['name']	
+		];
+	}
+}
 
-$stmt = $pdo->query("SELECT * FROM td_tasks");
-$tasks = $stmt->fetchAll();
-//dump($tasks);
+dump($items);
 
-$stmt = $pdo->query("SELECT td_tasks.*,td_projects.name AS project_name FROM `td_tasks`,td_projects WHERE td_projects.id = td_tasks.project_id ORDER BY td_projects.id");
-$tasks_and_projects = $stmt->fetchAll();
-//dump($tasks_and_projects);
-
-$projects_id = array_column($projects, 'id');
-dump($projects_id);
-$arr = array_combine($projects_id, $tasks_and_projects);
-dump($arr);
 include ("../templates/project_store.phtml");
