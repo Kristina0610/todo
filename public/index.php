@@ -1,5 +1,7 @@
 <?php 
 include("../src/connect.php");
+include ("../vendor/autoload.php");
+include ("../src/functions.php");
 
 if(isset($_GET['section'])) {
 	$section = $_GET['section'];
