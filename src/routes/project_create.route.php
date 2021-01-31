@@ -6,11 +6,10 @@ if (isset($_POST['submit'])) {
 	}
 
 	$errors = [];
-	$errors[] = 1;
 	if (empty($_POST['title'])) {
 		$errors['title'] = "Вы не указали название проекта";
 	} else {
-		$_POST['title'] = rtrim(mb_strtoupper(mb_substr($_POST['title'], 0,1)).mb_substr($_POST['title'], 1));
+		$_POST['title'] = mb_strtoupper(mb_substr($_POST['title'], 0,1)).mb_substr($_POST['title'], 1);
 		
 		$stmt = $pdo->prepare("SELECT name FROM td_projects WHERE LOWER(name) LIKE LOWER(?)");
 		$stmt->execute([$_POST['title']]);
@@ -24,22 +23,17 @@ if (isset($_POST['submit'])) {
 	if (empty($_POST['task_0'])) {
 		$errors['task_0'] = "Укажите задачу номер 1";
 	} else {
-		getErrorsOfTasks($_POST['task_0'],$_POST['title']);
-		if ($result) {
-			$errors['task_0'] = "В данном проекте уже есть задача с таким названием, как у задачи 1";		
-		}
-	}
-	for ($i=1; $i < 5; $i++) { 
-		if (!empty($_POST['task_'.$i])) {
-			getErrorsOfTasks($_POST['task_'.$i],$_POST['title']);
-			if ($result) {
-				$errors['task_'.$i] = "В данном проекте уже есть задача с таким названием, как у задачи ".($i+1);
+		for ($i=0; $i < 5; $i++) { 
+			if (!empty($_POST['task_'.$i])) {
+				if (!isUniqueTask($_POST['task_'.$i],$_POST['title'])) {
+					$errors['task_'.$i] = "В данном проекте уже есть задача с таким названием, как у задачи ".($i+1);
+				}
 			}
 		}
 	}
+	
 	dump($errors);
 	if (!$errors) {
-		dump(123);
 		try {
 			$pdo->beginTransaction();
 			
@@ -48,9 +42,10 @@ if (isset($_POST['submit'])) {
 
 			$last_id = $pdo->lastInsertId();
 
+			$stmt_tasks = $pdo->prepare("INSERT INTO td_tasks(name,project_id) VALUES (?,?)");
+
 			for ($i=0; $i < 5; $i++) { 
 				if (isset($_POST['task_'.$i])) {
-					$stmt_tasks = $pdo->prepare("INSERT INTO td_tasks(name,project_id) VALUES (?,?)");
 					$stmt_tasks->execute([$_POST['task_'.$i],$last_id]);
 				}
 			}
