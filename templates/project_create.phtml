@@ -42,7 +42,7 @@
                                     <div class="form-group" id="task">
                                         <label class="label-control">Задача</label>
                                         <input type="text" class="form-control" name="task_0" id="0" placeholder="Задача - 1" value="<?php echo @$fields['task_0'];?>" data-change="input" data-custom-target="#note-task ">
-                                        <?php for ($i=1; $i < 5 ; $i++) : ?>
+                                        <?php for ($i=1; $i < $count_tasks; $i++) : ?>
                                         <?php if (isset($_POST['task_'.$i]) && !empty($_POST['task_'.$i])): ?>
                                         <input type="text" class="form-control" name="task_<?php echo $i;?>" id="<?php echo ($i+1);?>" placeholder="Задача - <?php echo ($i+1);?>" value="<?php echo @$fields['task_'.$i];?>" data-change="input" data-custom-target="#note-task ">
                                          <?php endif; ?>

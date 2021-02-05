@@ -2,6 +2,7 @@
 include("../src/connect.php");
 include ("../vendor/autoload.php");
 include ("../src/functions.php");
+include ("../src/config.php");
 
 if(isset($_GET['section'])) {
 	$section = $_GET['section'];

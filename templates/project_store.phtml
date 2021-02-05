@@ -18,6 +18,11 @@
              
                 <?php require_once ("card_topnav_right.phtml"); ?>
                    </div>
+      <div class="my-error">
+        <?php foreach ($errors as $error): ?>
+          <?php echo $error."<br>"; ?>
+        <?php endforeach; ?>
+      </div><br>
       <div class="container-fluid">
          <div class="row">
             <div class="col-lg-12">
@@ -43,8 +48,8 @@
                                  <td><i class="las la-lock mr-3 font-size-20"></i>Only You</td>
                                  <td>
                                     <div>
-                                        <a href="#" class="badge badge-success mr-3 edit-note" data-toggle="modal" data-target="#edit-note"><i class="las la-pen mr-0"></i></a>
-                                        <a href="#" class="badge badge-danger" data-extra-toggle="delete" data-closest-elem="tr"data-extra-toggle="delete" data-closest-elem="tr"><i class="las la-trash-alt mr-0"></i></a>
+                                        <a href="#" class="badge badge-success mr-3 edit-note"><i class="las la-pen mr-0"></i></a>
+                                        <a href="/?section=project_store&operation=delete&id=<?php echo ($item['data-level'] == 1 ? 'p' : 't').$item['data-id'];?>" class="badge badge-danger"><i class="las la-trash-alt mr-0"></i></a>
                                     </div>
                                  </td>
                               </tr>
@@ -62,8 +67,10 @@
     
     <!-- Page end  -->
 </div>
-  </div>
-</div>
+   <!-- Modal -->
+   
+      </div>
+    </div>
     <!-- Wrapper End-->
     <?php require_once("footer.phtml"); ?>
     <?php require_once("bottom.phtml"); ?>

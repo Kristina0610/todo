@@ -44,7 +44,7 @@ if (isset($_POST['submit'])) {
 
 			$stmt_tasks = $pdo->prepare("INSERT INTO td_tasks(name,project_id) VALUES (?,?)");
 
-			for ($i=0; $i < 5; $i++) { 
+			for ($i=0; $i < $count_tasks; $i++) { 
 				if (isset($_POST['task_'.$i])) {
 					$stmt_tasks->execute([$_POST['task_'.$i],$last_id]);
 				}

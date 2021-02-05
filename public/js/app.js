@@ -735,11 +735,11 @@ Index Of Script
           })
           
           swalWithBootstrapButtons.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
+            title: 'Вы уверены?',
+            text: "Вы не сможете отменить это действие!",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Yes, delete it!',
+            confirmButtonText: 'Да, удалить!',
             showClass: {
                 popup: 'animate__animated animate__zoomIn'
             },
@@ -750,8 +750,8 @@ Index Of Script
         .then((willDelete) => {
             if (willDelete.isConfirmed) {
                 swalWithBootstrapButtons.fire({
-                        title: 'Deleted!',
-                        text: "Your note has been deleted.",
+                        title: 'Удалено!',
+                        text: "Удаление прошло успешно",
                         icon: 'success',
                         showClass: {
                             popup: 'animate__animated animate__zoomIn'
@@ -769,7 +769,7 @@ Index Of Script
                   })
             } else {
                 swalWithBootstrapButtons.fire({
-                    title: "Your note is safe!",
+                    title: "Ваша заметка в безопасности!",
                     showClass: {
                         popup: 'animate__animated animate__zoomIn'
                     },
