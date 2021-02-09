@@ -20,42 +20,17 @@ if (isset($_POST['submit'])) {
 		}
 	}
 
-	if (empty($_POST['task_0'])) {
-		$errors['task_0'] = "Укажите задачу номер 1";
-	} else {
-		for ($i=0; $i < 5; $i++) { 
-			if (!empty($_POST['task_'.$i])) {
-				if (!isUniqueTask($_POST['task_'.$i],$_POST['title'])) {
-					$errors['task_'.$i] = "В данном проекте уже есть задача с таким названием, как у задачи ".($i+1);
-				}
-			}
-		}
-	}
-
 	if (!$errors) {
 		try {
-			$pdo->beginTransaction();
-			
+
 			$stmt_projects = $pdo->prepare("INSERT INTO td_projects(name) VALUES(?)");
 			$stmt_projects->execute([$_POST['title']]);
 
-			$last_id = $pdo->lastInsertId();
-
-			$stmt_tasks = $pdo->prepare("INSERT INTO td_tasks(name,project_id) VALUES (?,?)");
-
-			for ($i=0; $i < $count_tasks; $i++) { 
-				if (isset($_POST['task_'.$i])) {
-					$stmt_tasks->execute([$_POST['task_'.$i],$last_id]);
-				}
-			}
-			
-			$pdo->commit();
 			header("Location: /?section=index");
 			exit;
 
 		} catch (Exception $e) {
 			$errors[] = "Попробуйте выполнить вставку позже или обратитесь к администратору";
-			$pdo->rollback();
 		}
 	}
 	
@@ -73,30 +48,27 @@ if (isset($_GET['id'])) {
 		$stmt_project->execute([$get_finish_id]);
 		$project = $stmt_project->fetch();
 
-		if ($project > 0) {
+		if (!$project) {
+			$errors['project_not_found'] = "Данный проект не найден в БД";
+		} else {
 			$fields['title'] = $project['name'];
-			//dump($fields);
-			$stmt_count = $pdo->prepare("SELECT COUNT(*) FROM td_tasks WHERE project_id = ?");
-			$stmt_count->execute([$get_finish_id]);
-			$count_tasks = $stmt_count->fetch();
-			dump($count_tasks);
-			if ($count_tasks['COUNT(*)'] > 0) {
-				$stmt = $pdo->prepare("SELECT * FROM td_tasks WHERE project_id = ?");
-				$stmt->execute([$get_finish_id]);
-				$tasks = $stmt->fetchAll();
-				dump($tasks);
-				for ($i=0; $i < $count_tasks['COUNT*'] ; $i++) { 
-					dump($i);
-					$fields['task_'.$i] = $tasks[$i]['name'];
-				}
+		
+			$stmt = $pdo->prepare("SELECT * FROM td_tasks WHERE project_id = ?");
+			$stmt->execute([$get_finish_id]);
+			$project['tasks'] = $stmt->fetchAll();
+			
+			foreach ($project['tasks'] as $key => $value) {
+				$fields['task_'.$key] = $value['name'];
 			}
+			dump($fields);
+			
 		}
-	
-	}
+	} 
 }
 
 $fields = isset($_POST['submit']) ? $_POST : @$fields;
 
-
+$stmt = $pdo->query("SELECT * FROM td_projects");
+$projects = $stmt->fetchAll();
 
 include ("../templates/project_store.phtml");
