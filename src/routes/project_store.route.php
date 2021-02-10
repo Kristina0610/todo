@@ -22,9 +22,16 @@ if (isset($_POST['submit'])) {
 
 	if (!$errors) {
 		try {
+			$data = [$_POST['title']];
 
-			$stmt_projects = $pdo->prepare("INSERT INTO td_projects(name) VALUES(?)");
-			$stmt_projects->execute([$_POST['title']]);
+			if (isset($_GET['id'])) {
+				$stmt = $pdo->prepare("UPDATE td_projects SET name = ? WHERE id = ?");
+				$data[] = $_GET['id'];
+			} else {
+				$stmt = $pdo->prepare("INSERT INTO td_projects(name) VALUES(?)");
+			}
+			
+			$stmt->execute($data);
 
 			header("Location: /?section=index");
 			exit;
@@ -40,29 +47,15 @@ if (isset($_POST['submit'])) {
 
 
 if (isset($_GET['id'])) {
-	$get_start_id = mb_substr($_GET['id'], 0,1);
-	$get_finish_id = mb_substr($_GET['id'], 1);
+	
+	$stmt_project = $pdo->prepare("SELECT * FROM td_projects WHERE id = ?");
+	$stmt_project->execute([$_GET['id']]);
+	$project = $stmt_project->fetch();
 
-	if ($get_start_id == 'p') {
-		$stmt_project = $pdo->prepare("SELECT * FROM td_projects WHERE id = ?");
-		$stmt_project->execute([$get_finish_id]);
-		$project = $stmt_project->fetch();
-
-		if (!$project) {
-			$errors['project_not_found'] = "Данный проект не найден в БД";
-		} else {
-			$fields['title'] = $project['name'];
-		
-			$stmt = $pdo->prepare("SELECT * FROM td_tasks WHERE project_id = ?");
-			$stmt->execute([$get_finish_id]);
-			$project['tasks'] = $stmt->fetchAll();
-			
-			foreach ($project['tasks'] as $key => $value) {
-				$fields['task_'.$key] = $value['name'];
-			}
-			dump($fields);
-			
-		}
+	if (!$project) {
+		$errors['project_not_found'] = "Данный проект не найден в БД";
+	} else {
+		$fields['title'] = $project['name'];
 	} 
 }
 
