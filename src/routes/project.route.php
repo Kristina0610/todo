@@ -9,8 +9,9 @@ if (isset($_GET['id'])) {
 		$errors['project_not_found'] = "Данный проект не найден в БД";
 	}
 	if (!$errors) {
+		$project_id = $_GET['id'];
 		$stmt=$pdo->prepare("SELECT * FROM td_tasks WHERE project_id = ?");
-		$stmt->execute([$_GET['id']]);
+		$stmt->execute([$project_id]);
 		$tasks = $stmt->fetchAll();
 
 		$items = [];
@@ -34,7 +35,6 @@ if (isset($_GET['id'])) {
 				];	
 			}
 		}
-		dump($items);
 	}
 
 }
