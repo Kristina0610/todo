@@ -61,7 +61,6 @@ if (isset($_GET['id'])) {
 
 $fields = isset($_POST['submit']) ? $_POST : @$fields;
 
-$stmt = $pdo->query("SELECT * FROM td_projects");
-$projects = $stmt->fetchAll();
+$projects = getProjects();
 
 include ("../templates/project_store.phtml");

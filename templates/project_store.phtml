@@ -80,7 +80,7 @@
                 </div>
             </div>
         </div>
-        <?php endif ?>
+        <?php endif; ?>
         
     
     <!-- Page end  -->
@@ -90,38 +90,5 @@
     <!-- Wrapper End-->
     <?php require_once("footer.phtml"); ?>
    	<?php require_once("bottom.phtml"); ?>
-
-    <script type="text/javascript">
-        let e = document.getElementById('task');
-        function addTask() {
-            let task = e.getElementsByTagName('input');
-            if (task.length < 5) {
-                let newTask = document.createElement('input');
-                newTask.type = 'text';
-                newTask.className= 'form-control';
-                newTask.name = 'task_' + task.length;
-                newTask.id = 'task_' +  task.length;
-                newTask.placeholder = 'Задача - ' + (task.length+1);
-               // newTask.data-change = 'input';
-                //newTask.data-custom-target='#note-task';
-                e.appendChild(newTask);
-            }
-        }
-
-
-
-      //Попытка написать появление поля Содержимое задачи
-        $("[name=task_0]").change(function (e) {
-            var task=this.value();
-            if (task != 0 ) {
-                $("[name=description]").empty();
-                $("[name=description]").append("<textarea/>").val(0).text("Пробую");
-                $("#description").show("fast");
-            } else {
-                $("[name=description]").empty();
-                $("#description").hide("fast");
-            }
-        })
-    </script>
   </body>
 </html>
