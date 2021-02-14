@@ -1,0 +1,61 @@
+<?php require_once("top.phtml"); ?>
+    
+    <!-- Wrapper Start -->
+  	<?php require_once("sidebar_left.phtml"); ?>
+
+       <div class="content-page">
+     <div class="container-fluid">        
+        <div class="desktop-header">
+            <div class="card card-block topnav-left">
+                <div class="card-body write-card">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <h4><?php echo @$_GET['subtask_id'] ? 'Редактировать Подзадачу':'Новая Подзадача';?></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php if (isset($errors['task_not_found'])): ?>
+            <div class="my-error"><?php echo $errors['task_not_found'];?></div>
+            <?php else: ?>
+            <div class="row">
+            <div class="col-lg-12">                
+                <div class="card card-block card-stretch pb-2">
+                    <div class="card-body write-card pb-4">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <form action="" method="POST">
+                                    <div class="form-group">
+                                        <label class="label-control">Название Подзадачи</label>
+                                        <input type="text" class="form-control" name="title" placeholder="Введите название" value="<?php echo @$fields['title'];?>" data-change="input" data-custom-target="#note-title">
+                                    </div>
+                                    <?php if (isset($errors['title'])) : ?>
+                                        <label class="my-error" for="title"><?php echo $errors['title']."<br>"; ?></label>
+                                     <?php endif; ?>
+                                    <span>
+                                        <button name ="submit" class="btn btn-primary ml-1">
+                                            <svg width="20" class="svg-icon" id="new-note-save" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+                                            </svg>
+                                            Сохранить
+                                        </button>
+                                    </span>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <?php endif; ?>
+        
+    
+    <!-- Page end  -->
+</div>
+  </div>
+</div>
+    <!-- Wrapper End-->
+    <?php require_once("footer.phtml"); ?>
+   	<?php require_once("bottom.phtml"); ?>
+  </body>
+</html>
