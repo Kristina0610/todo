@@ -17,17 +17,11 @@ switch (@$_GET['operation']) {
 
 			if (!$errors) {
 				try {
-					$stmt_t = $pdo->prepare("SELECT * FROM td_tasks WHERE id = ?");
-					$stmt_t->execute([$subtask['task_id']]);
-					$task = $stmt_t->fetchAll();
-
 					$stmt = $pdo->prepare("DELETE FROM td_subtasks WHERE id = ?");
 					$stmt->execute([$_GET['subtask_id']]);
 
 					if ($stmt->rowCount() > 0) {
-						
-						dump($task['project_id']);
-						header("Location: /?section=project&id=".$task['project_id']);
+						header("Location: /?section=subtask");
 						exit;
 					}
 				} catch (Exception $e) {
@@ -37,8 +31,8 @@ switch (@$_GET['operation']) {
 		}
 		break;
 }
-dump($errors);
+
 
 $projects = getProjects();
 
-include ("../templates/project.phtml");
+include ("../templates/subtask.phtml");
