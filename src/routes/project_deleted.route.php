@@ -33,41 +33,39 @@ if (isset($_POST['submit'])) {
 				
 				$stmt_task = $pdo->prepare("SELECT id FROM td_tasks WHERE project_id = ?");
 				$stmt_task->execute([$project['id']]);
-				
-				if (empty($stmt_task->fetch()) == true) {
+				$tasks = $stmt_task->fetchAll();
+				if (empty($tasks == true)) {
 					$information = "Проект успешно удален!";
-					/*header("Location: /?section=index");
-					exit;*/
 				} else {
+					foreach ($tasks as $task) {
+						$stmt_subtask = $pdo->prepare("SELECT * FROM td_subtasks WHERE task_id = ?");
+						$stmt_subtask->execute([$task['id']]);
+						$subtask = $stmt_subtask->fetch();
+
+						if (empty($subtask) != true) {
+							$stmt_delete_subt = $pdo->prepare("DELETE FROM td_subtasks WHERE task_id = ?");
+							$stmt_delete_subt->execute([$task['id']]);
+
+							if ($stmt_delete_subt->rowCount() > 0) {
+								$information = "Проект и подзадачи успешно удалены!";
+							} else {
+								throw new Exception("Не удалось удалить подзадачи проекта");
+							}
+						} 
+					}
 
 					$stmt_delete_t = $pdo->prepare("DELETE FROM td_tasks WHERE project_id = ?");
 					$stmt_delete_t->execute([$project['id']]);
 
 					if ($stmt_delete_t->rowCount() > 0) {
-						while ($task = $stmt_task->fetch()) {
-							$stmt_subtask = $pdo->prepare("SELECT * FROM td_subtasks WHERE task_id = ?");
-							$stmt_subtask->execute([$task['id']]);
-							$subtask = $stmt_subtask->fetch();
-
-							if (empty($subtask) == true) {
-								$information = "Проект и его задачи успешно удалены!";
-							} else {
-								$stmt_delete_subt = $pdo->prepare("DELETE FROM td_subtasks WHERE task_id = ?");
-								$stmt_delete_subt->execute([$task['id']]);
-
-								if ($stmt_delete_subt->rowCount() > 0) {
-									$information = "Проект, задачи и подзадачи успешно удалены!";
-								} else {
-									throw new Exception("Не удалось удалить подзадачи проекта");
-								}
-							}
-						}
+						$information = "Проект и задачи, и подзадачи успешно удалены!";
 					} else {
 						throw new Exception("Не удалось удалить задачи проекта");
 					}
-				}
+				
+				} 
 			} else {
-				throw new Exception("Не удалось удалить проект");
+				throw new Exception("Не удалось удалить проект"); 
 			}
 
 			$pdo->commit();
