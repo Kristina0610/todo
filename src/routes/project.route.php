@@ -1,9 +1,8 @@
 <?php 
 $errors = [];
 if (isset($_GET['id'])) {
-	$stmt = $pdo->prepare("SELECT * FROM td_projects WHERE id = ?");
-	$stmt->execute([$_GET['id']]);
-	$project = $stmt->fetch();
+	
+	$project = getProject($_GET['id']);
 	
 	if (!$project) {
 		$errors['project_not_found'] = "Данный проект не найден в БД";
@@ -34,11 +33,15 @@ if (isset($_GET['id'])) {
 				];	
 			}
 		}
+		//Удаленные задачи:
+		$stmt_td = $pdo->prepare("SELECT COUNT(*) FROM td_tasks WHERE project_id = ? AND deleted_at IS NOT NULL");
+		$stmt_td->execute([$project_id]);
+		$count_tasks_deleted = $stmt_td->fetchColumn();
 	}
 
 }
 
-//Удаление задач из проекта soft-delete
+//Удаление задач из проекта soft-delete начало
 
 switch (@$_GET['operation']) {
 	case 'delete_task':
@@ -67,6 +70,7 @@ switch (@$_GET['operation']) {
 		}
 		break;
 }
+//Удаление задач из проекта soft-delete конец
 
 $projects = getProjects();
 

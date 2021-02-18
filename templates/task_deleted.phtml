@@ -1,0 +1,54 @@
+<?php require_once("top.phtml"); ?>
+    <!-- Wrapper Start -->
+
+  	<?php require_once("sidebar_left.phtml"); ?>
+
+      <div class="content-page">
+        <div class="container-fluid">
+          <?php if (isset($errors['project_not_found'])): ?>
+            <div class="my-error"><?php echo $errors['project_not_found']; ?></div>
+            <?php else: ?>
+              <div class="desktop-header">
+                  <div class="card card-block topnav-left">
+                      <div class="card-body d-flex align-items-center">
+                          <div class="d-flex justify-content-between">
+                              <h2 class="text-capitalize">Проект: <?php echo $project['name']; ?></h2>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+                <div class="row">
+                <div class="col-lg-12">
+                   <form action="" method="POST">
+                   	<h3 class="text-capitalize">Список Удаленных Задач:</h3>
+                    <div class="row">
+                      <div class="col-2">
+                        <?php foreach ($tasks_deleted as $task_d): ?>
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="<?php echo $task_d['name']; ?>" name="<?php echo $task_d['id']; ?>" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">
+                              <?php echo $task_d['name']; ?>
+                            </label>
+                          </div>
+                        <?php endforeach; ?>
+                        </div>
+                    </div>
+                    <div class="card-body d-flex align-items-center">
+                      <div class="col-3">
+                        <!--<button class="btn btn-outline-primary svg-icon" name="submit">Восстановить выбранные задачи</button>-->
+                        <input name="submit" class="btn btn-outline-primary svg-icon" value="Восстановить выбранные задачи" type="submit">
+                    </div>
+                    </form>
+                </div>
+              </div>
+          <?php endif; ?>
+    <!-- Page end  -->
+        </div>
+      </div>
+    </div>
+    <!-- Wrapper End-->
+  <?php require_once("footer.phtml"); ?>
+ 	<?php require_once("bottom.phtml"); ?>
+
+  </body>
+</html>
