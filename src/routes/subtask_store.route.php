@@ -47,7 +47,7 @@ if (isset($_POST['submit'])) {
 			
 			$stmt->execute($data);
 
-			header("Location: /?section=task&task_id=".$_GET['task_id']);
+			header("Location: /?section=project&id=".$task['project_id']);
 			exit;
 
 		} catch (Exception $e) {
@@ -61,12 +61,12 @@ if (isset($_POST['submit'])) {
 
 
 if (isset($_GET['subtask_id'])) {
-    $stmt = $pdo->prepare("SELECT * FROM td_subtasks WHERE id = ? AND task_id = ?");
-    $stmt->execute([$_GET['subtask_id'],$_GET['task_id']]);
+    $stmt = $pdo->prepare("SELECT * FROM td_subtasks WHERE id = ?");
+    $stmt->execute([$_GET['subtask_id']]);
     $subtask = $stmt->fetch();
 
     if(!$subtask) {
-        $errors['subtask_not_found'] = "Данной подзадачи нет в этой задаче";
+        $errors['subtask_not_found'] = "Данной подзадача не найдена в БД";
     } else {
         $fields['title'] = $subtask['name'];
     }

@@ -11,7 +11,7 @@ if (isset($_GET['task_id'])) {
 	} else {
 		$stmt = $pdo->prepare("SELECT * FROM td_subtasks WHERE task_id = ?");
 		$stmt->execute([$_GET['task_id']]);
-		$subtasks = $stmt->fetchAll();
+		$subtasks = $stmt->fetchAll();														
 	}
 }
 $projects = getProjects();
