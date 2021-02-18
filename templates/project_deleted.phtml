@@ -1,0 +1,59 @@
+<?php require_once("top.phtml"); ?>
+    <!-- Wrapper Start -->
+
+  	<?php require_once("sidebar_left.phtml"); ?>
+
+       <div class="content-page">
+        <div class="container-fluid">
+          <?php if (isset($errors['project_not_found'])): ?>
+            <div class="my-error"><?php echo $errors['project_not_found']; ?></div>
+          <?php else: ?>
+            <div class="desktop-header">
+                <div class="card card-block topnav-left">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="d-flex justify-content-between">
+                            <h4 class="text-capitalize" style="margin-left: auto; margin-right: auto;">Вы действительно хотите удалить проект <?php echo $project['name']; ?>?</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+               <div class="row">
+                  <div class="col-lg-12">
+                      <form action="" method="POST">
+                        <div class="row">
+                          <span>Данный проект будет удален безвозвратно. Если Вы в этом уверенны, введите "<strong style="color: red">Я хочу удалить проект!</strong>" в форму ниже:</span>
+                        </div>
+                        <div class="row" style="padding-top: 30px;">
+                          <textarea name="delete" id="" cols="40" rows="3" style="margin-left: 250px;"><?php echo @$_POST['delete']; ?></textarea>
+                        </div>
+                        <div style="margin-left: 330px; margin-top: 30px;">
+                          <input name="submit" class="btn btn-outline-primary svg-icon" value="Удалить проект" type="submit">
+                        </div>
+                        <div class="row" style="margin-top: 30px;">
+                          <?php if (isset($errors)): ?>
+                            <?php foreach ($errors as $error): ?>
+                              <div class="my-error"><span><?php echo $error; ?></span></div>
+                            <?php endforeach; ?>
+                          <?php endif; ?>
+                          <?php if (isset($information)): ?>
+                            <div class="my-error"><span><?php echo $information; ?></span></div>
+                          <?php endif ?>
+                        </div>
+                      </form>
+                  </div>
+               </div>
+            </div>
+          <?php endif; ?>
+      </div>
+    </div>
+    
+    <!-- Page end  -->
+</div>
+  </div>
+</div>
+    <!-- Wrapper End-->
+    <?php require_once("footer.phtml"); ?>
+   	<?php require_once("bottom.phtml"); ?>
+  </body>
+</html>
