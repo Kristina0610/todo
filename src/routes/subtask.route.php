@@ -7,27 +7,19 @@ switch (@$_GET['operation']) {
 		if (!isset($_GET['subtask_id'])) {
 			$errors[] = "Не передан идентификатор подзадачи";
 		} else {
-			$stmt = $pdo->prepare("SELECT * FROM td_subtasks WHERE id = ?");
-			$stmt->execute([$_GET['subtask_id']]);
-			$subtask = $stmt->fetch();
+			try {
+				$stmt = $pdo->prepare("DELETE FROM td_subtasks WHERE id = ?");
+				$stmt->execute([$_GET['subtask_id']]);
 
-			if (!$subtask) {
-				$errors[] = "Данная подзадача не найдена в БД";
-			} 
-
-			if (!$errors) {
-				try {
-					$stmt = $pdo->prepare("DELETE FROM td_subtasks WHERE id = ?");
-					$stmt->execute([$_GET['subtask_id']]);
-
-					if ($stmt->rowCount() > 0) {
-						header("Location: /?section=subtask");
-						exit;
-					}
-				} catch (Exception $e) {
-					$errors[] = "Системная ошибка, попробуйте удалить позже!";
+				if ($stmt->rowCount() > 0) {
+					header("Location: /?section=subtask");
+					exit;
+				} else {
+					$errors[] = "Данная подзадача не найдена в БД";
 				}
-			}
+			} catch (Exception $e) {
+				$errors[] = "Системная ошибка, попробуйте удалить позже!";
+			}	
 		}
 		break;
 }

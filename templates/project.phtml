@@ -29,7 +29,7 @@
                           </a>
                       </div>
                       <?php if ($count_tasks_deleted > 0):?>
-                        <a href="/?section=task_deleted&project_id=<?php echo $project_id; ?>" class="btn btn-outline-primary svg-icon">
+                        <a href="/?section=task_get_deleted&project_id=<?php echo $project_id; ?>" class="btn btn-outline-primary svg-icon">
                             <span>Удаленные задачи</span>
                         </a>
                       <?php endif; ?>
@@ -52,14 +52,14 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                             </svg>
                         </a>
-                        <a href="/?section=project&id=<?php echo $project_id; ?>&operation=delete_task&task_id=<?php echo $item['data-id']; ?>" class="svg-icon" style="float: right;">
+                        <a href="/?section=task_delete&task_id=<?php echo $item['data-id']; ?>&project_id=<?php echo $project_id; ?>" class="svg-icon" style="float: right;">
                             <svg width="20" class="svg-icon" id="iq-main-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                           </svg>
                         </a>
                         <div class="my-error">
-                          <?php if (isset($errors['task_delete'])): ?>
-                            <div><?php echo $errors['task_delete']; ?></div>
+                          <?php if ($flash->hasError('task_delete_'.$item['data-id'])): ?>
+                            <div><?php echo $flash->getError('task_delete_'.$item['data-id']); ?></div>
                           <?php endif; ?>
                         </div>
                       </div>
@@ -97,6 +97,10 @@
     <!-- Wrapper End-->
   <?php require_once("footer.phtml"); ?>
  	<?php require_once("bottom.phtml"); ?>
-
+  <?php if ($flash->hasSuccess('task_delete')): ?>
+    <script>
+      toastr.success('Задача успешно удалена!');
+    </script>
+  <?php endif; ?>
   </body>
 </html>

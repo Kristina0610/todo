@@ -28,42 +28,21 @@ if (isset($_POST['submit'])) {
 
 			$stmt = $pdo->prepare("DELETE FROM td_projects WHERE id = ?");
 			$stmt->execute([$project['id']]);
-			
+			$project_result = $stmt->rowCount() > 0;
+
 			if ($stmt->rowCount() > 0) {
 				
 				$stmt_task = $pdo->prepare("SELECT id FROM td_tasks WHERE project_id = ?");
 				$stmt_task->execute([$project['id']]);
 				$tasks = $stmt_task->fetchAll();
-				if (empty($tasks == true)) {
-					$information = "Проект успешно удален!";
-				} else {
-					foreach ($tasks as $task) {
-						$stmt_subtask = $pdo->prepare("SELECT * FROM td_subtasks WHERE task_id = ?");
-						$stmt_subtask->execute([$task['id']]);
-						$subtask = $stmt_subtask->fetch();
-
-						if (empty($subtask) != true) {
-							$stmt_delete_subt = $pdo->prepare("DELETE FROM td_subtasks WHERE task_id = ?");
-							$stmt_delete_subt->execute([$task['id']]);
-
-							if ($stmt_delete_subt->rowCount() > 0) {
-								$information = "Проект и подзадачи успешно удалены!";
-							} else {
-								throw new Exception("Не удалось удалить подзадачи проекта");
-							}
-						} 
-					}
-
-					$stmt_delete_t = $pdo->prepare("DELETE FROM td_tasks WHERE project_id = ?");
-					$stmt_delete_t->execute([$project['id']]);
-
-					if ($stmt_delete_t->rowCount() > 0) {
-						$information = "Проект и задачи, и подзадачи успешно удалены!";
-					} else {
-						throw new Exception("Не удалось удалить задачи проекта");
-					}
 				
-				} 
+				$stmt_delete_subt = $pdo->prepare("DELETE FROM td_subtasks WHERE task_id = ?");
+				foreach ($tasks as $task) {
+					$stmt_delete_subt->execute([$task['id']]);
+				}
+
+				$stmt_delete_t = $pdo->prepare("DELETE FROM td_tasks WHERE project_id = ?");
+				$stmt_delete_t->execute([$project['id']]);
 			} else {
 				throw new Exception("Не удалось удалить проект"); 
 			}

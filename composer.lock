@@ -4,8 +4,44 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2046108ac1a58b5510b1dddf908d010f",
+    "content-hash": "769f6cedb2c122abefdba999666ebea8",
     "packages": [
+        {
+            "name": "dtkahl/php-flash-messages",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dtkahl/php-flash-messages.git",
+                "reference": "f44ba667cc35029dee7f04091a4d57f510702dfa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dtkahl/php-flash-messages/zipball/f44ba667cc35029dee7f04091a4d57f510702dfa",
+                "reference": "f44ba667cc35029dee7f04091a4d57f510702dfa",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "5.2.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Dtkahl\\FlashMessages\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "support": {
+                "issues": "https://github.com/dtkahl/php-flash-messages/issues",
+                "source": "https://github.com/dtkahl/php-flash-messages/tree/master"
+            },
+            "time": "2016-05-20T14:34:06+00:00"
+        },
         {
             "name": "fzaninotto/faker",
             "version": "v1.9.2",

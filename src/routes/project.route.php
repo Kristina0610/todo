@@ -41,37 +41,6 @@ if (isset($_GET['id'])) {
 
 }
 
-//Удаление задач из проекта soft-delete начало
-
-switch (@$_GET['operation']) {
-	case 'delete_task':
-		if (!isset($_GET['task_id'])) {
-			$errors['task_delete'] = "Не передан идентификатор задачи";
-		} else {
-			$stmt = $pdo->prepare("SELECT * FROM td_tasks WHERE id = ?");
-			$stmt->execute([$_GET['task_id']]);
-			$task = $stmt->fetch();
-
-			if (!$task) {
-				$errors['task_delete'] = "Данная задача не найдена в БД";
-			}
-			if (!$errors) {
-				try {
-					$stmt = $pdo->prepare("UPDATE td_tasks SET deleted_at = NOW() WHERE id = ?");
-					$stmt->execute([$_GET['task_id']]);
-
-					header("Location: /?section=project&id=".$_GET['id']);
-					exit;
-
-				} catch(Exception $e) {
-					$errors[] = "Попробуйте выполнить удаление задачи позже или обратитесь к администратору";
-				}
-			}
-		}
-		break;
-}
-//Удаление задач из проекта soft-delete конец
-
 $projects = getProjects();
 
 include("../templates/project.phtml");
