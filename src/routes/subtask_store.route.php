@@ -74,6 +74,7 @@ if (isset($_GET['subtask_id'])) {
 
 $fields = isset($_POST['submit']) ? $_POST : @$fields;
 
+$tags = getTagAndCount();
 $projects = getProjects();
 
 include ("../templates/subtask_store.phtml");

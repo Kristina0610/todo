@@ -40,7 +40,7 @@ if (isset($_GET['id'])) {
 	}
 
 }
-
+$tags = getTagAndCount();
 $projects = getProjects();
 
 include("../templates/project.phtml");

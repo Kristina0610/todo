@@ -8,7 +8,42 @@
         </div>
     </div>    
     <div class="data-scrollbar" data-scroll="1">
-        
+        <div class="sidebar-caption dropdown">
+              <a href="#" class="iq-user-toggle d-flex align-items-center justify-content-between" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <div class="caption">
+                    <div class="row">
+                        <div class="col-1">
+                            <svg width="20" class="svg-icon" id="iq-main-7" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                            </svg> 
+                        </div> 
+                        <div class="col-3">                                                   
+                            <h5 class="mb-0 line-height" style="text-align: left;">Теги</h5>
+                        </div>
+                    </div> 
+                  </div>
+                  <i class="las la-angle-down"></i>
+              </a>
+              <div class="dropdown-menu w-100 border-0 my-2" aria-labelledby="dropdownMenuButton">
+                <?php foreach ($tags as $tag) : ?>
+                    <?php if ($tag['count'] > 0): ?>
+                        <a class="dropdown-item mb-2" href="#<?php echo $tag['id']; ?>">
+                            <!--<?php foreach ($first_letters as $value) : ?>
+                                <?php if ($tag['first_letter'] == $value): ?>
+                                    <span class="mt-2"><?php echo $value; ?></span>
+                                <?php endif ?>
+                            <?php endforeach; ?>-->
+                            <span class="mt-2"><?php echo $tag['name']; ?></span>
+                            <span class="mt-2 col-2" style="color: rgba(0,0,0,0.5);">(<?php echo $tag['count']; ?>)</span>
+                        </a>
+                    <?php else: ?>
+                        <a class="dropdown-item mb-2" href="#">
+                            <span class="mt-2"><?php echo $tag['name']; ?></span>
+                        </a>
+                    <?php endif ?>
+                <?php endforeach; ?>
+              </div>
+          </div>
         <div class="sidebar-btn dropdown mb-3">
             <a href="/?section=project_store" class="btn btn-primary pr-5 position-relative iq-user-toggle d-flex align-items-center justify-content-between" style="height: 40px;"><span class="btn-title"><i class="ri-add-line mr-3"></i>Создать Проект</span></a>
         </div>

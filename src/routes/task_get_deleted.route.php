@@ -38,6 +38,6 @@ if (isset($_POST['tasks'])) {
 }
 
 
-
+$tags = getTagAndCount();
 $projects = getProjects();
 include("../templates/task_get_deleted.phtml");

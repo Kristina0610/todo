@@ -68,6 +68,7 @@ if (isset($_GET['task_id'])) {
 
 $fields = isset($_POST['submit']) ? $_POST : @$fields;
 
+$tags = getTagAndCount();
 $projects = getProjects();
 
 include ("../templates/task_store.phtml");

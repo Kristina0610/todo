@@ -50,14 +50,12 @@ if (isset($_POST['submit'])) {
 			$pdo->commit();
 		} catch (Exception $e) {
 			$pdo->rollback();
-			dump($e->getMessage());
-			
 			$errors[] = "Произошла системная ошибка, попробуйте удалить проект позже или обратитесь к администратору";
 			
 		}
 	}
 }
-
+$tags = getTagAndCount();
 $projects = getProjects();
 
 include("../templates/project_deleted.phtml");

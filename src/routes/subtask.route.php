@@ -24,7 +24,7 @@ switch (@$_GET['operation']) {
 		break;
 }
 
-
+$tags = getTagAndCount();
 $projects = getProjects();
 
 include ("../templates/subtask.phtml");
