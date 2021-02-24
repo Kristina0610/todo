@@ -19,8 +19,13 @@
             <div class="col-lg-12">
                <form action="" method="GET">
                		<a href="/?section=project_store" class="btn btn-outline-primary svg-icon">
-                        <span>Создать Новый Проект</span>
+                    <span>Создать Новый Проект</span>
                   </a>
+                  <div class="my-error" style="padding-top: 5%">
+                    <?php if ($flash->hasError('tag_notask_delete')): ?>
+                      <div><?php echo $flash->getError('tag_notask_delete'); ?></div>
+                    <?php endif; ?>
+                  </div>
                 </form>
             </div>
          </div>
@@ -35,5 +40,10 @@
     <!-- Wrapper End-->
     <?php require_once("footer.phtml"); ?>
    	<?php require_once("bottom.phtml"); ?>
+    <?php if ($flash->hasSuccess('tag_notask_delete')): ?>
+      <script>
+        toastr.success('Теги без задач успешно удалены!');
+      </script>
+    <?php endif; ?>
   </body>
 </html>

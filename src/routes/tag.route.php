@@ -4,12 +4,12 @@ $errors = [];
 if (isset($_GET['tag_id'])) {
 	$stmt = $pdo->prepare("SELECT * FROM td_tags WHERE id = ?");
 	$stmt->execute([$_GET['tag_id']]);
-	$tag = $stmt->fetchAll();
+	$tag_all = $stmt->fetchAll();
 
-	if (!$tag) {
+	if (!$tag_all) {
 		$errors['tag_not_found'] = "Тег не найден в БД";
 	} else {
-		$stmt = $pdo->prepare("SELECT * FROM td_tasks_tags WHERE tag_id = ?");
+		$stmt = $pdo->prepare("SELECT * FROM td_tasks_tags WHERE tag_id = ? AND task_id IN (SELECT id FROM td_tasks WHERE deleted_at IS NULL)");
 		$stmt->execute([$_GET['tag_id']]);
 		$tasks_id = $stmt->fetchAll();
 
@@ -40,3 +40,4 @@ $tags = getTagAndCount();
 $projects = getProjects();
 
 include ("../templates/tag.phtml");
+dump($tag['name']);

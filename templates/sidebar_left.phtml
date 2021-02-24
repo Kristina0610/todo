@@ -25,6 +25,12 @@
                   <i class="las la-angle-down"></i>
               </a>
               <div class="dropdown-menu w-100 border-0 my-2" aria-labelledby="dropdownMenuButton">
+                <span style="padding-left: 4%;">
+                    <a href="/?section=tag_notask_delete" class="btn btn-outline-primary svg-icon">
+                        <span>Удалить теги без задач</span>
+                    </a>
+                </span>
+                
                 <?php foreach ($tags as $tag) : ?>
                     <?php if ($tag['count'] > 0): ?>
                         <a class="dropdown-item mb-2" href="/?section=tag&tag_id=<?php echo $tag['id']; ?>">

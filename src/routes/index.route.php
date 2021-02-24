@@ -1,5 +1,4 @@
 <?php 
-
 $projects = getProjects();
 //$tags = getTags();
 

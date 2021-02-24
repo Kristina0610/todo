@@ -31,7 +31,7 @@ function getTagAndCount()
 	$stmt_t = $pdo->query("SELECT * FROM td_tags  ORDER BY name ASC");
 	$tags = $stmt_t->fetchAll();
 
-	$stmt = $pdo->prepare("SELECT COUNT(*) FROM td_tasks_tags WHERE tag_id = ?");
+	$stmt = $pdo->prepare("SELECT COUNT(*) FROM td_tasks_tags WHERE tag_id = ? AND task_id IN (SELECT id FROM td_tasks WHERE deleted_at IS NULL)");
 	$new_tags = [];
 	foreach ($tags as $tag) {
 		$stmt->execute([$tag['id']]);
