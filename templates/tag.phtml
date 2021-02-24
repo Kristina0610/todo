@@ -1,0 +1,63 @@
+<?php require_once("top.phtml"); ?>
+    <!-- Wrapper Start -->
+
+  	<?php require_once("sidebar_left.phtml"); ?>
+
+      <div class="content-page">
+        <div class="container-fluid">
+          <?php if (isset($errors['tag_not_found'])): ?>
+            <div class="my-error"><?php echo $errors['tag_not_found']; ?></div>
+          <?php else: ?>
+            <div class="desktop-header">
+                <div class="card card-block topnav-left">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="d-flex justify-content-between">
+                            <h4 class="text-capitalize">Тег <?php echo $tag['name']; ?></h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php if (isset($errors['tag_dont_have_task'])): ?>
+              <div class="my-error"><?php echo $errors['tag_dont_have_task']; ?></div>
+              <?php else: ?>
+              <div class="container-fluid">
+                 <div class="row">
+                    <div class="col-lg-12">
+                       <form action="" method="GET">
+                       		<table class="table table-striped">
+                          <thead>
+                            <tr>
+                              <th scope="col"></th>
+                              <th scope="col">Название задачи</th>
+                              <th scope="col">Название проекта</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <?php foreach ($items as $key => $item): ?>
+                              <tr>
+                                <th scope="row"><?php echo $key+1; ?></th>
+                                <td><?php echo $item['task_name']; ?></td>
+                                <td><a href="/?section=project&id=<?php echo $item['project_id']; ?>">
+                                  <?php echo $item['project_name']; ?></a></td>
+                              </tr>
+                            <?php endforeach ?>
+                          </tbody>
+                        </table>
+                        </form>
+                    </div>
+                 </div>
+              </div>
+            <?php endif ?>
+        </div>
+      </div>
+          <?php endif; ?>
+    
+    <!-- Page end  -->
+</div>
+  </div>
+</div>
+    <!-- Wrapper End-->
+    <?php require_once("footer.phtml"); ?>
+   	<?php require_once("bottom.phtml"); ?>
+  </body>
+</html>
