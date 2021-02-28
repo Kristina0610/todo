@@ -15,13 +15,32 @@ if (isset($_GET['id'])) {
 		$items = [];
 
 		while($task = $stmt->fetch()) {
-			$items[] = [
-				"data-parent" => 0,
-				"data-id" => $task['id'],
-				"name" => $task['name'],
-				"status"=>NULL
-			];
-
+			$stmt_t = $pdo->prepare("SELECT * FROM td_tasks_tags WHERE task_id = ?");
+			$stmt_t->execute([$task['id']]);
+			$rez=$stmt_t->fetch();
+			if (!$rez) {
+				$items[] = [
+					"data-parent" => 0,
+					"data-id" => $task['id'],
+					"name" => $task['name'],
+					"status"=>NULL,
+					"tags" => NULL
+				];	
+			} else {
+				$stmt_tags = $pdo->prepare("SELECT td_tags.* FROM td_tasks_tags, td_tags WHERE td_tasks_tags.task_id = ? AND td_tasks_tags.tag_id = td_tags.id");
+				$stmt_tags->execute([$task['id']]);
+				
+				while ($tags = $stmt_tags->fetchAll()) {
+					$items[] = [
+						"data-parent" => 0,
+						"data-id" => $task['id'],
+						"name" => $task['name'],
+						"status"=>NULL,
+						"tags" => $tags
+					];	
+				}
+			}
+			
 			$stmt_sub = $pdo->prepare("SELECT * FROM td_subtasks WHERE task_id = ?");
 			$stmt_sub->execute([$task['id']]);
 			while ($subtask = $stmt_sub->fetch()) {
@@ -29,7 +48,8 @@ if (isset($_GET['id'])) {
 					"data-parent" =>$task['id'],
 					"data-id" => $subtask['id'],
 					"name" => $subtask['name'],
-					"status"=>$subtask['status_completed']
+					"status"=>$subtask['status_completed'],
+					"tags" => NULL
 				];	
 			}
 		}
@@ -38,8 +58,8 @@ if (isset($_GET['id'])) {
 		$stmt_td->execute([$project_id]);
 		$count_tasks_deleted = $stmt_td->fetchColumn();
 	}
-
 }
+
 $tags = getTagAndCount();
 $projects = getProjects();
 
