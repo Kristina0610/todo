@@ -1,4 +1,14 @@
 <?php  
+function rsearch($folder, $pattern) {
+    $dir = new \RecursiveDirectoryIterator($folder);
+    $ite = new \RecursiveIteratorIterator($dir);
+    $files = new \RegexIterator($ite, $pattern, \RegexIterator::GET_MATCH);
+    $fileList = array();
+    foreach($files as $file) {
+        $fileList = array_merge($fileList, $file);
+    }
+    return $fileList;
+}
 
 function getProjects()
 {
@@ -53,4 +63,11 @@ function getFirstLetterTag($tags)
 		$first_letters[] = $tag['first_letter'];
 	}
 	return (array_unique($first_letters));
+}
+
+function setTaskTags($task_id,$tag_id)
+{	
+	global $pdo;
+	$stmt_task_tag = $pdo->prepare("INSERT INTO td_tasks_tags(task_id,tag_id) VALUES (?,?)");
+    $stmt_task_tag->execute([$task_id,$tag_id]);
 }

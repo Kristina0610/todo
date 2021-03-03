@@ -1,6 +1,6 @@
 <?php
 try {
-	$stmt = $pdo->query("DELETE FROM td_tags WHERE id NOT IN (SELECT tag_id FROM td_tasks_tags WHERE task_id IN (SELECT id FROM td_tasks WHERE deleted_at IS NULL))");
+	$stmt = $pdo->query("DELETE FROM td_tags WHERE id NOT IN (SELECT DISTINCT tag_id FROM td_tasks_tags, td_tasks WHERE td_tasks_tags.task_id = td_tasks.id AND deleted_at IS NULL)");
 	$stmt = $pdo->query("DELETE FROM td_tasks_tags WHERE tag_id NOT IN (SELECT id FROM td_tags)");
 	
 	if ($stmt->rowCount() > 0) {

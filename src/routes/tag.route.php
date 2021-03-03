@@ -9,16 +9,17 @@ if (isset($_GET['tag_id'])) {
 	if (!$tag_all) {
 		$errors['tag_not_found'] = "Тег не найден в БД";
 	} else {
-		$stmt = $pdo->prepare("SELECT * FROM td_tasks_tags WHERE tag_id = ? AND task_id IN (SELECT id FROM td_tasks WHERE deleted_at IS NULL)");
+		$stmt = $pdo->prepare("SELECT task_id FROM td_tasks_tags WHERE tag_id = ? AND task_id IN (SELECT id FROM td_tasks WHERE deleted_at IS NULL)");
 		$stmt->execute([$_GET['tag_id']]);
-		$tasks_id = $stmt->fetchAll();
+		$task_ids = array_column($stmt->fetchAll(), 'task_id');
 
-		if (!$tasks_id) {
+		if (!$task_ids) {
 			$errors['tag_dont_have_task'] = "К данному тегу не относится ни одна задача";
 		} else {
 			$items = [];
-			$stmt = $pdo->prepare("SELECT * FROM td_tasks WHERE deleted_at IS NULL AND id IN (SELECT task_id FROM td_tasks_tags WHERE tag_id = ?)");
-			$stmt->execute([$_GET['tag_id']]);
+			$in  = str_repeat('?,', count($task_ids) - 1) . '?';  //  передаем значения массива в виде ?,?,?....
+			$stmt = $pdo->prepare("SELECT * FROM td_tasks WHERE id IN ({$in})");
+			$stmt->execute($task_ids);
 			$tasks = $stmt->fetchAll();
 			foreach ($tasks as $task) {
 				$stmt_p = $pdo->prepare("SELECT name FROM td_projects WHERE id = ?");

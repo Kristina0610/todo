@@ -14,6 +14,8 @@ if(isset($_GET['section'])) {
 	$section = "index";
 }
 
-
+/*foreach (rsearch('../src/routes/','/.*php/') as $filename) {
+    require_once _DIR_ .'/'.$filename;
+}*/
 require_once "../src/routes/".$section.".route.php";
 
