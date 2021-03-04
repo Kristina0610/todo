@@ -13,7 +13,7 @@ if (isset($_GET['id'])) {
 		$stmt->execute([$project_id]);
 		
 		$items = [];
-
+		
 		while($task = $stmt->fetch()) {
 			$stmt_t = $pdo->prepare("SELECT * FROM td_tasks_tags WHERE task_id = ?");
 			$stmt_t->execute([$task['id']]);
@@ -23,6 +23,7 @@ if (isset($_GET['id'])) {
 					"data-parent" => 0,
 					"data-id" => $task['id'],
 					"name" => $task['name'],
+					"priority" => $task['priority'],
 					"status"=>NULL,
 					"tags" => NULL
 				];	
@@ -35,6 +36,7 @@ if (isset($_GET['id'])) {
 						"data-parent" => 0,
 						"data-id" => $task['id'],
 						"name" => $task['name'],
+						"priority" => $task['priority'],
 						"status"=>NULL,
 						"tags" => $tags
 					];	
@@ -48,11 +50,31 @@ if (isset($_GET['id'])) {
 					"data-parent" =>$task['id'],
 					"data-id" => $subtask['id'],
 					"name" => $subtask['name'],
+					"priority" => NULL,
 					"status"=>$subtask['status_completed'],
 					"tags" => NULL
 				];	
 			}
 		}
+		/*foreach ($items as $item) {
+			switch ($item['priority']) {
+				case 'extreme':
+					$color = 'red';
+					break;
+				case 'high':
+					$color = 'yellow';
+					break;
+				case 'middle':
+					$color = 'green';
+					break;
+				case 'low':
+					$color = 'grey';
+					break;
+				default:
+					break;
+			}
+		}*/
+		
 		//Удаленные задачи:
 		$stmt_td = $pdo->prepare("SELECT COUNT(*) FROM td_tasks WHERE project_id = ? AND deleted_at IS NOT NULL");
 		$stmt_td->execute([$project_id]);

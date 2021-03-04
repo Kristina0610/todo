@@ -38,7 +38,16 @@
                     <?php foreach ($items as $item): ?>
                       <?php if ($item['data-parent'] == 0) : ?>
                       <div class="card-body d-flex align-items-center"> 
-                        <div class="col-5">
+                        <?php if ($item['priority'] == 'extreme') : ?>
+                          <div class="col-5" style="background-color: #f79299;">
+                        <?php elseif ($item['priority'] == 'high') : ?>
+                          <div class="col-5" style="background-color: #f6f792;">
+                        <?php elseif ($item['priority'] == 'middle') : ?>
+                          <div class="col-5" style="background-color: #92f7c6;">
+                        <?php else : ?>
+                          <div class="col-5">
+                        <?php endif; ?>
+                        
                           <div class="row">
                             <h4 class="text-capitalize" style="margin-right: 15px;"><?php echo $item['name']; ?></h4>
                             <?php if ($item['tags'] != NUll): ?>

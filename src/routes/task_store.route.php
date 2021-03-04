@@ -73,6 +73,11 @@ if (isset($_POST['submit'])) {
             }
         }
 
+        if (isset($_POST['priority'])) {
+           $stmt = $pdo->prepare("UPDATE td_tasks SET priority = ? WHERE id = ?");
+           $stmt->execute([$_POST['priority'],$last_id]);
+        }
+
         if (isset($_POST['project_id'])) {
             $stmt = $pdo->prepare("UPDATE td_tasks SET project_id = ? WHERE id = ?");
             $stmt->execute([$_POST['project_id'],$last_id]);
@@ -111,9 +116,15 @@ if (isset($_GET['task_id'])) {
         $tag_names = array_column($stmt->fetchAll(), 'name');
 
         $fields['tags'] = implode(', ', $tag_names);
-    }
 
+        $fields['priority'] = $task['priority'];
+
+        $fields['project_id'] = $_GET['project_id'];
+    }
 }
+
+$priorities = ["extreme"=>"Экстримальный","high"=>"Высокий","middle"=>"Средний","low"=>"Низкий"];
+
 $fields = isset($_POST['submit']) ? $_POST : @$fields;
  
 $tags = getTagAndCount();
