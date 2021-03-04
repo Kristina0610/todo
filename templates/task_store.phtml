@@ -41,7 +41,21 @@
                                     </div>
                                     <?php if (isset($errors['tags'])) : ?>
                                         <label class="my-error" for="title"><?php echo $errors['tags']."<br>"; ?></label>
-                                     <?php endif; ?>
+                                    <?php endif; ?>
+                                    <?php if (@$_GET['task_id']) : ?>
+                                        <div class="form-group">
+                                            <label class="label-control">Проект, к которому относится задача</label>
+                                            <select name="project_id" class="form-select col-6 form-control" style="max-width: 100%;" aria-label="Default select example">
+                                              <option disabled selected>Выберите проект</option>
+                                              <?php foreach ($projects as $project): ?>
+                                                <option value="<?php echo $project['id']; ?>"
+                                                    <?php echo (@$fields['project_id'] == $project['id']) ? 'selected' : '';?>>
+                                                    <?php echo $project['name']; ?>
+                                                </option>
+                                              <?php endforeach; ?>
+                                            </select>
+                                        </div>  
+                                    <?php endif; ?>
                                     <span>
                                         <button name ="submit" class="btn btn-primary ml-1">
                                             <svg width="20" class="svg-icon" id="new-note-save" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">

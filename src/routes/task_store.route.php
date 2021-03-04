@@ -72,10 +72,21 @@ if (isset($_POST['submit'])) {
                 
             }
         }
-        
-        $pdo->commit();
-        header("Location: /?section=project&id=".$_GET['project_id']);
-        exit;
+
+        if (isset($_POST['project_id'])) {
+            $stmt = $pdo->prepare("UPDATE td_tasks SET project_id = ? WHERE id = ?");
+            $stmt->execute([$_POST['project_id'],$last_id]);
+
+            $pdo->commit();
+
+            header("Location: /?section=project&id=".$_POST['project_id']);
+            exit;
+        } else {
+            $pdo->commit();
+
+            header("Location: /?section=project&id=".$_GET['project_id']);
+            exit;
+        }
 
        } catch (Exception $e) {
             $errors[] = "Системная ошибка, не удалось выполнить вставку задачи в БД. Обратитесь к администратору";
@@ -85,12 +96,12 @@ if (isset($_POST['submit'])) {
 }
 
 if (isset($_GET['task_id'])) {
-    $stmt = $pdo->prepare("SELECT * FROM td_tasks WHERE id = ? AND project_id = ?");
-    $stmt->execute([$_GET['task_id'],$_GET['project_id']]);
+    $stmt = $pdo->prepare("SELECT * FROM td_tasks WHERE id = ?"); //AND project_id = ?");
+    $stmt->execute([$_GET['task_id']]);
     $task = $stmt->fetch();
 
     if(!$task) {
-        $errors['task_not_found'] = "Данной задачи нет в этом проекте";
+        $errors['task_not_found'] = "Данная задача не найдена";
     } else {
         $fields['title'] = $task['name'];
 
