@@ -5,7 +5,7 @@
 
        <div class="content-page">
      <div class="container-fluid">        
-       
+        
         <?php if (isset($errors)): ?>
           <?php foreach ($errors as $error): ?>
               <div class="my-error"><?php echo $error;?></div>
@@ -19,6 +19,7 @@
                   </div>
               </div>
           </div>
+          <?php require_once ("auth_and_reg.phtml"); ?>
       </div>
         
         

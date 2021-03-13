@@ -13,6 +13,7 @@
                     </div>
                 </div>
             </div>
+            <?php require_once ("auth_and_reg.phtml"); ?>
         </div>
         <?php if (isset($errors['task_not_found'])): ?>
             <div class="my-error"><?php echo $errors['task_not_found'];?></div>

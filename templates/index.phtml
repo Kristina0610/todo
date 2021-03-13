@@ -12,30 +12,7 @@
                       </div>
                   </div>
               </div>
-              <div class="card topnav-right">
-                <div class="card-body card-content-right">
-                    <ul class="list-inline m-0 p-0 d-flex align-items-center justify-content-around">
-                        <li class="nav-item nav-icon dropdown">
-                            <a href="/?section=login" class="search-toggle dropdown-toggle nav-icon-1">
-                            <i class="">
-                                <svg class="svg-icon" id="iq-auth-1-1" width="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                                </svg>
-                            </i>
-                            </a>
-                        </li>
-                        <li class="nav-item nav-icon dropdown pl-3"> 
-                            <a href="#popup" class="search-toggle dropdown-toggle nav-icon-1">
-                            <i class="">
-                                <svg  class="svg-icon" id="iq-auth-1-2" width="20"  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-                                </svg>
-                            </i>
-                            </a>
-                        </li>  
-                    </ul>
-                </div>           
-             </div>
+              <?php require_once ("auth_and_reg.phtml"); ?>
           </div>
       <div class="container-fluid">
          <div class="row">
@@ -60,57 +37,6 @@
 </div>
   </div>
 </div>
-<div id="popup" class="popup">
-    <div class="popup__body">
-      <div class="popup__content">
-        <a href="" class="popup__close">X</a>
-        <section class="login-content">
-         <div class="container h-100">
-            <div class="row justify-content-center align-items-center height-self-center">
-               <div class="col-md-5 col-sm-12 col-12 align-self-center">
-                  <div class="sign-user_card">   
-                     <div class="logo-detail">            
-                           <div class="d-flex align-items-center"><img src="images/logo.png" class="img-fluid rounded-normal light-logo logo" alt="logo"> <h4 class="logo-title ml-3">Ту_Душка</h4></div>
-                     </div>      
-                     <h3 class="mb-2">Вход</h3>
-                     <p>Войдите, чтоб оставаться на связи</p>
-                     <form>
-                        <div class="row">
-                           <div class="col-lg-12">
-                              <div class="floating-label form-group">
-                                 <input class="floating-input form-control" type="phone" placeholder=" ">
-                                 <label>Телефон</label>
-                              </div>
-                           </div>
-                           <div class="col-lg-12">
-                              <div class="floating-label form-group">
-                                 <input class="floating-input form-control" type="password" placeholder=" ">
-                                 <label>Пароль</label>
-                              </div>
-                           </div>
-                           <div class="col-lg-6">
-                              <div class="custom-control custom-checkbox mb-3 text-left">
-                                 <input type="checkbox" class="custom-control-input" id="customCheck1">
-                                 <label class="custom-control-label" for="customCheck1">Запомнить меня</label>
-                              </div>
-                           </div>
-                           <div class="col-lg-6">
-                              <a href="#" class="text-primary float-right">Забыл пароль?</a>
-                           </div>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Войти</button>
-                        <p class="mt-3 mb-0">
-                           Создать аккаунт <a href="/?section=reg" class="text-primary"><b>Зарегистрироваться</b></a>
-                        </p>
-                     </form>
-                  </div>
-               </div>
-            </div>
-         </div>
-        </section>
-      </div>
-    </div>
-  </div>
     <!-- Wrapper End-->
     <?php require_once("footer.phtml"); ?>
    	<?php require_once("bottom.phtml"); ?>

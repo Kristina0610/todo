@@ -9,13 +9,14 @@
             <div class="my-error"><?php echo $errors['project_not_found']; ?></div>
             <?php else: ?>
               <div class="desktop-header">
-                  <div class="card card-block topnav-left">
-                      <div class="card-body d-flex align-items-center">
-                          <div class="d-flex justify-content-between">
-                              <h2 class="text-capitalize">Проект: <?php echo $project['name']; ?></h2>
-                          </div>
-                      </div>
-                  </div>
+                <div class="card card-block topnav-left">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="d-flex justify-content-between">
+                            <h2 class="text-capitalize">Проект: <?php echo $project['name']; ?></h2>
+                        </div>
+                    </div>
+                </div>
+                <?php require_once ("auth_and_reg.phtml"); ?>
               </div>
                 <div class="row">
                 <div class="col-lg-12">
