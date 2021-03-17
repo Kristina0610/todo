@@ -1,15 +1,13 @@
 <?php 
-
+header('Content-Type: application/json');
 //6LfDzX0aAAAAACtkM-jCSPdBueePWEAqMguPQVFQ  - секретный ключ 
 //6LfDzX0aAAAAAEHlspKjdFAwe2oT_DiEz7FLfSIv  - ключ сайта
-$errors = [];
+if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
-
-if (isset($_POST['reg-submit'])) {
-	dump($_POST);
 	foreach ($_POST as $key => $value) {
 		$_POST[$key] = trim($value);
 	}
+	$errors = [];
 	if (empty($_POST['firstname'])) {
 		$errors['firstname'] = "Укажите имя";
 	}
@@ -23,15 +21,15 @@ if (isset($_POST['reg-submit'])) {
 	} elseif (mb_strlen($_POST['password']) < 6) {
 		$errors['password'] = "Пароль должен быть не менее 6-ти символов";
 	}
-	if (empty($_POST['re-password'])) {
-		$errors['re-password'] = "Повторите пароль";
-	} elseif ($_POST['password'] !== $_POST['re-password']) {
-		$errors['re-password'] = "Повтор пароля не совпадает с заданным паролем";
+	if (empty($_POST['re_password'])) {
+		$errors['re_password'] = "Повторите пароль";
+	} elseif ($_POST['password'] !== $_POST['re_password']) {
+		$errors['re_password'] = "Повтор пароля не совпадает с заданным паролем";
 	}
-	if (@$_POST['checkbox'] !== 'on') {
+	if ($_POST['checkbox'] !== 'true') {
 		$errors['checkbox'] = "Необходимо дать согласие на пользовательское соглашение";
 	}
-	if (!$_POST['g-recaptcha-response']) {
+	/*if (!$_POST['g-recaptcha-response']) {
 		$errors['g-recaptcha-response'] = "Подтвердите, что вы не робот";
 	} else {
 		$url = "https://www.google.com/recaptcha/api/siteverify";
@@ -43,9 +41,12 @@ if (isset($_POST['reg-submit'])) {
 		if ($data->success == false) {
 			$errors['g-recaptcha-response'] = "Стоит пройти re-captcha снова!";
 		}
+	}*/
+	if ($errors) {
+		echo json_encode([
+			"errors"=>$errors
+		]);
 	}
-
 }
 
-
-include("../templates/reg.phtml");
+//include("../templates/reg.phtml");
