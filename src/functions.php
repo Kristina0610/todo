@@ -92,12 +92,15 @@ function getTagAndCount2()
 	return $new_tags;
 }
 
-function userStore($firstname, $phone, $password, $lastname = NULL, $status = NULL, $id = NULL){
+function userStore($firstname = NULL, $phone = NULL, $password = NULL, $lastname = NULL, $status = NULL, $id = NULL){
 	global $pdo;
 	try {
 		if($id) {
-			$stmt = $pdo->prepare("UPDATE td_users SET firstname = :firstname, lastname = :lastname, phone = :phone, password = :password, status = :status WHERE id = :id");
-			$stmt->execute([$firstname,$lastname,$phone,$password,$status]);
+			$stmt = $pdo->prepare("UPDATE td_users SET status = :status WHERE id = :id");
+			$stmt->execute([
+				"status"=>$status ?? 'active',
+				"id" => $id
+			]);
 
 			return $pdo->rowCount() > 0;
 
@@ -107,7 +110,7 @@ function userStore($firstname, $phone, $password, $lastname = NULL, $status = NU
 				"firstname"=>$firstname,
 				"lastname"=>$lastname,
 				"phone"=>$phone,
-				"password"=>$password,
+				"password"=>password_hash($password, PASSWORD_DEFAULT),
 				"status"=>$status ?? 'not_verified'
 			]);
 
