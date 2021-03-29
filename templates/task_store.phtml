@@ -29,11 +29,11 @@
                                 <form action="" method="POST">
                                     <div class="form-group">
                                         <label class="label-control">Название Задачи</label>
-                                        <input type="text" class="form-control" name="title" placeholder="Введите название" value="<?php echo @$fields['title'];?>" data-change="input" data-custom-target="#note-title">
+                                        <input type="text" class="form-control" name="name" placeholder="Введите название" value="<?php echo @$fields['name'];?>" data-change="input" data-custom-target="#note-title">
                                     </div>
                         
-                                    <?php if (isset($errors['title'])) : ?>
-                                        <label class="my-error" for="title"><?php echo $errors['title']."<br>"; ?></label>
+                                    <?php if (isset($errors['name'])) : ?>
+                                        <label class="my-error" for="name"><?php echo $errors['name']."<br>"; ?></label>
                                     <?php endif; ?>
                                    
                                     <div class="form-group">
@@ -41,7 +41,7 @@
                                         <input type="text" class="form-control" name="tags" placeholder="Введите названия тегов через запятую" value="<?php echo @$fields['tags'];?>" data-change="input" data-custom-target="#note-title">
                                     </div>
                                     <?php if (isset($errors['tags'])) : ?>
-                                        <label class="my-error" for="title"><?php echo $errors['tags']."<br>"; ?></label>
+                                        <label class="my-error" for="tags"><?php echo $errors['tags']."<br>"; ?></label>
                                     <?php endif; ?>
                                     <div class="form-group">
                                         <label class="label-control">Приоритет задачи</label>

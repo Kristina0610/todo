@@ -63,3 +63,7 @@ table.dataTable{width:100%;margin:0 auto;clear:both;border-collapse:separate;bor
 .my-error {
   color: red;
 }
+
+.my-warning {
+	color: green;
+}

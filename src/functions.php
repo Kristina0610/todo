@@ -1,4 +1,5 @@
 <?php  
+use Carbon\Carbon;
 function rsearch($folder, $pattern) {
     $dir = new \RecursiveDirectoryIterator($folder);
     $ite = new \RecursiveIteratorIterator($dir);
@@ -70,4 +71,67 @@ function setTaskTags($task_id,$tag_id)
 	global $pdo;
 	$stmt_task_tag = $pdo->prepare("INSERT INTO td_tasks_tags(task_id,tag_id) VALUES (?,?)");
     $stmt_task_tag->execute([$task_id,$tag_id]);
+}
+
+function getTagAndCount2()
+{	
+	global $pdo;
+	$stmt_t = $pdo->query("SELECT * FROM td_tags  ORDER BY name ASC");
+	$tags = $stmt_t->fetchAll();
+
+	$stmt = $pdo->prepare("SELECT COUNT(*) FROM td_tasks_tags WHERE tag_id = ? AND task_id IN (SELECT id FROM td_tasks WHERE deleted_at IS NULL)");
+	$new_tags = [];
+	foreach ($tags as $tag) {
+		$stmt->execute([$tag['id']]);
+		$new_tags[mb_strtoupper(mb_substr($tag['name'], 0,1))][] = [
+			"id"=>$tag['id'],
+			"name"=>$tag['name'],
+			"count"=>$stmt->fetchColumn()
+		];
+	}
+	return $new_tags;
+}
+
+function userStore($firstname, $phone, $password, $lastname = NULL, $status = NULL, $id = NULL){
+	global $pdo;
+	try {
+		if($id) {
+			$stmt = $pdo->prepare("UPDATE td_users SET firstname = :firstname, lastname = :lastname, phone = :phone, password = :password, status = :status WHERE id = :id");
+			$stmt->execute([$firstname,$lastname,$phone,$password,$status]);
+
+			return $pdo->rowCount() > 0;
+
+		} else {
+			$stmt = $pdo->prepare("INSERT INTO td_users(firstname,lastname,phone,password,status) VALUES(:firstname,:lastname,:phone,:password,:status)");
+			$stmt->execute([
+				"firstname"=>$firstname,
+				"lastname"=>$lastname,
+				"phone"=>$phone,
+				"password"=>$password,
+				"status"=>$status ?? 'not_verified'
+			]);
+
+			return $pdo->lastInsertId();
+		}
+	} catch(Exception $e) {
+		var_dump($e->getMessage());
+		return false;
+	}
+}
+
+function verificationCreate($code,$user_id,$expired_minutes = 15) {
+	global $pdo;
+	try {
+		$stmt = $pdo->prepare("INSERT INTO td_phone_verification(code,created_at,expired_at,user_id) VALUES (:code,NOW(),:expired_at,:user_id)");
+		$stmt->execute([
+			"code"=>$code,
+			"expired_at"=>Carbon::now()->addMinutes($expired_minutes)->toDateTimeString(),
+			"user_id"=>$user_id
+		]);
+		
+		return $pdo->lastInsertId();	
+	} catch (Exception $e) {
+		//var_dump($e->getMessage());
+		return false;
+	}
 }

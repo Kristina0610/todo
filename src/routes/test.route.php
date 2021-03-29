@@ -4,6 +4,9 @@
     color: red;
     font-style: italic;
   }
+  .my-warning {
+    color: green;
+  }
 </style>
 	<form action="">
 		 <section class="login-content">
@@ -35,6 +38,7 @@
                                 <div class="floating-label form-group">
                                    <input id="phone" class="floating-input form-control" type="text" placeholder="Телефон в формате +78001001010">
                                    <div class="my-error" id="error-phone"></div>
+                                   <div class="my-warning" id="warning-phone"></div>
                                 </div>
                              </div>
                              
@@ -54,9 +58,9 @@
                              
                              <div class="col-lg-12">
                                 <div class="custom-control custom-checkbox mb-3 text-left">
-                                   <input id="customCheck1" type="checkbox" name="checkbox" class="custom-control-input" value="">
+                                   <input id="customCheck1" type="checkbox" name="agree" class="custom-control-input" value="">
                                    <label class="custom-control-label" for="customCheck1">Я согласен с пользовательским соглашением</label>
-                                   <div class="my-error" id="error-checkbox"></div>
+                                   <div class="my-error" id="error-agree"></div>
                                 </div>
                              </div>
                              <!--<div class="g-recaptcha" data-sitekey="6LfDzX0aAAAAAEHlspKjdFAwe2oT_DiEz7FLfSIv"></div>
@@ -101,6 +105,7 @@
           "checkbox": $('#customCheck1').is(':checked')
 				}
 			}).done(function (r) {
+        //console.log(r);
 				if (r.data !== undefined) {
           $("#s1").hide(200);
           $("#s2").show(200);
@@ -112,6 +117,6 @@
         }
 			});
 		});
-		
+
 	</script>
-</html>
+</html> 

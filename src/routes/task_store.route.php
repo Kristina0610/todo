@@ -16,17 +16,17 @@ if (isset($_POST['submit'])) {
         if (!$project) {
             $errors['project_not_found'] = "Проект, в который Вы хотите добавить задачу не найден в БД";
         } else {
-            if (empty($_POST['title'])) {
-                $errors['title'] = "Вы не указали название задачи";
+            if (empty($_POST['name'])) {
+                $errors['name'] = "Вы не указали название задачи";
             } else {
-                $_POST['title'] = mb_strtoupper(mb_substr($_POST['title'], 0,1)).mb_substr($_POST['title'],1);
-                if (!(@$_GET['task_id'])) {
+                $_POST['name'] = mb_strtoupper(mb_substr($_POST['name'], 0,1)).mb_substr($_POST['name'],1);
+                if (!isset($_GET['task_id'])) {
                     $stmt = $pdo->prepare("SELECT * FROM td_tasks WHERE LOWER(name) LIKE LOWER(?) AND project_id = ? AND deleted_at IS NULL");
-                    $stmt->execute([$_POST['title'],$_GET['project_id']]);
+                    $stmt->execute([$_POST['name'],$_GET['project_id']]);
                     $result = $stmt->fetch();
 
                     if ($result) {
-                        $errors['title'] = "В данном проекте уже существует задача с таким названием.";
+                        $errors['name'] = "В данном проекте уже существует задача с таким названием.";
                     }
                 }   
             }
@@ -36,15 +36,20 @@ if (isset($_POST['submit'])) {
        try {
         $pdo->beginTransaction();
 
-        $data = [$_POST['title'],$_GET['project_id']];
+        $data = [
+            "name" => $_POST['name'],
+            "priority" => $_POST['priority'] ?? 'low'
+        ];
 
         if (isset($_GET['task_id'])) {
-            $stmt = $pdo->prepare("UPDATE td_tasks SET name = ? WHERE project_id = ? AND id = ?");
-            $data[] = $_GET['task_id'];
+            $stmt = $pdo->prepare("UPDATE td_tasks SET name = :name, project_id = :project_id, priority = :priority WHERE  id = :id");
+            $data['project_id'] = $_POST['project_id'];
+            $data['id'] = $_GET['task_id'];
             $stmt->execute($data);
             $last_id = $_GET['task_id'];
         } else {
-            $stmt = $pdo->prepare("INSERT INTO td_tasks(name,project_id) VALUES (?,?)");
+            $stmt = $pdo->prepare("INSERT INTO td_tasks(name,project_id,priority) VALUES (:name,:project_id,:priority)");
+            $data['project_id'] = $_GET['project_id'];
             $stmt->execute($data);
             $last_id = $pdo->lastInsertId();
         }
@@ -73,25 +78,10 @@ if (isset($_POST['submit'])) {
             }
         }
 
-        if (isset($_POST['priority'])) {
-           $stmt = $pdo->prepare("UPDATE td_tasks SET priority = ? WHERE id = ?");
-           $stmt->execute([$_POST['priority'],$last_id]);
-        }
+        $pdo->commit();
 
-        if (isset($_POST['project_id'])) {
-            $stmt = $pdo->prepare("UPDATE td_tasks SET project_id = ? WHERE id = ?");
-            $stmt->execute([$_POST['project_id'],$last_id]);
-
-            $pdo->commit();
-
-            header("Location: /?section=project&id=".$_POST['project_id']);
-            exit;
-        } else {
-            $pdo->commit();
-
-            header("Location: /?section=project&id=".$_GET['project_id']);
-            exit;
-        }
+        header("Location: /?section=project&id=".$data['project_id']);
+        exit;
 
        } catch (Exception $e) {
             $errors[] = "Системная ошибка, не удалось выполнить вставку задачи в БД. Обратитесь к администратору";
@@ -99,7 +89,7 @@ if (isset($_POST['submit'])) {
        }
     }
 }
-
+$fields = [];
 if (isset($_GET['task_id'])) {
     $stmt = $pdo->prepare("SELECT * FROM td_tasks WHERE id = ?"); //AND project_id = ?");
     $stmt->execute([$_GET['task_id']]);
@@ -108,25 +98,21 @@ if (isset($_GET['task_id'])) {
     if(!$task) {
         $errors['task_not_found'] = "Данная задача не найдена";
     } else {
-        $fields['title'] = $task['name'];
+        $fields['name'] = $task['name'];
 
         $stmt = $pdo->prepare("SELECT name FROM td_tasks_tags, td_tags WHERE td_tasks_tags.tag_id = td_tags.id AND td_tasks_tags.task_id = ?");
         $stmt->execute([$_GET['task_id']]);
 
         $tag_names = array_column($stmt->fetchAll(), 'name');
-
         $fields['tags'] = implode(', ', $tag_names);
-
         $fields['priority'] = $task['priority'];
-
-        $fields['project_id'] = $_GET['project_id'];
+        $fields['project_id'] = $task['project_id'];
     }
 }
 
 $priorities = ["extreme"=>"Экстримальный","high"=>"Высокий","middle"=>"Средний","low"=>"Низкий"];
 
-$fields = isset($_POST['submit']) ? $_POST : @$fields;
- 
+$fields = isset($_POST['submit']) ? $_POST : $fields; 
 $tags = getTagAndCount();
 $projects = getProjects();
 
