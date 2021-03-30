@@ -98,11 +98,11 @@ function userStore($firstname = NULL, $phone = NULL, $password = NULL, $lastname
 		if($id) {
 			$stmt = $pdo->prepare("UPDATE td_users SET status = :status WHERE id = :id");
 			$stmt->execute([
-				"status"=>$status ?? 'active',
+				"status"=>'active',
 				"id" => $id
 			]);
 
-			return $pdo->rowCount() > 0;
+			return $stmt->rowCount() > 0;
 
 		} else {
 			$stmt = $pdo->prepare("INSERT INTO td_users(firstname,lastname,phone,password,status) VALUES(:firstname,:lastname,:phone,:password,:status)");

@@ -16,11 +16,11 @@
                        <div class="logo-detail">            
                              <div class="d-flex align-items-center"><img src="images/logo.png" class="img-fluid rounded-normal light-logo logo" alt="logo"> <h4 class="logo-title ml-3">Ту_Душка</h4></div>
                        </div> 
-                       <div class="row" id="s1"> 
+                       <div id="s1">
                        <h3 class="mb-2">Зарегистрироваться</h3>
                        <p>Создай свой аккаунт</p>
                        <form action="#">
-                          
+                          <div class="row"> 
                              <div class="col-lg-6">
                                 <div class="floating-label form-group">
                                    <input id="firstname" class="floating-input form-control" type="text" placeholder="Имя">
@@ -71,12 +71,13 @@
                           <button name="reg-submit" class="btn btn-primary">Зарегистрироваться</button>
                           </div>
                         </div>
+                        </div>
                         <div id="s2" style="display: none;">
                           <div class="col-lg-12">
                             <div class="floating-label form-group">
                                <input id="code" class="floating-input form-control" type="text" placeholder="Введите последние 6-ть цифр номера со входящего звонка">
-                                <div id="error-code" name="errors"></div>
                             </div>
+                            <div class="my-error"></div>
                           </div>
                            <div class="col-lg-12">
                           <button name="reg-finish" class="btn btn-primary">Завершить регистрацию</button>
@@ -150,15 +151,16 @@
             "code": $("#code").val()
           }
         }).done(function (r) {
-          console.log(r);
-          //$("[name=success],[name=errors]").html("");
+         // $("[name=success],[name=errors]").html("");
 
           if (r.data !== undefined) {
             $("#s2").hide(200);
             $("#s3").show(200);
+            location.href = "http://todo.local/";
           } else if (r.errors !== undefined) {
-            for (key in errors) {
-              $("#error-"+key).html(r.errors[key]);
+            $(".my-error").html("");
+            for(key in r.errors) {
+              $(".my-error").html(r.errors[key]);
             }
           }
         });

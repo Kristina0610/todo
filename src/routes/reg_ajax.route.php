@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 	if (@$_POST['agree'] !== 'true') {
 		$errors['agree'] = "Необходимо дать согласие на пользовательское соглашение";
 	}
-	/*if (empty($_POST['g-recaptcha-response'])) {
+	if (empty($_POST['g-recaptcha-response'])) {
 		$errors['g-recaptcha-response'] = "Подтвердите, что вы не робот";
 	} else {
 		$url = "https://www.google.com/recaptcha/api/siteverify";
@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 		if ($data->success == false) {
 			$errors['g-recaptcha-response'] = "Стоит пройти re-captcha снова!";
 		}
-	}*/
+	}
 	
 
 	if ($errors) {
